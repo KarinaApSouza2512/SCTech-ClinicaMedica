@@ -1,6 +1,6 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { env } from '../config/env';
-import { Role } from '../enums/Role';
+import { isRole, Role } from '../enums/Role';
 import { AppError } from './AppError';
 
 export interface AccessTokenPayload {
@@ -18,7 +18,7 @@ function isAccessTokenPayload(value: unknown): value is AccessTokenPayload {
   return (
     typeof candidate.sub === 'string' &&
     typeof candidate.email === 'string' &&
-    (candidate.role === Role.ADMIN || candidate.role === Role.ATTENDANT)
+    isRole(candidate.role)
   );
 }
 
