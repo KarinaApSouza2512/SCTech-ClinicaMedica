@@ -1,5 +1,4 @@
 import { Role } from '../enums/Role';
-import { UserRepository } from '../repositories/UserRepository';
 import { AppError } from '../utils/AppError';
 import { comparePassword } from '../utils/hash';
 import { signAccessToken } from '../utils/jwt';
@@ -23,7 +22,7 @@ export interface AuthResult {
 }
 
 export class AuthService {
-  private readonly userService = new UserService();
+  constructor(private readonly userService: UserService = new UserService()) {}
 
   async register(input: RegisterInput): Promise<PublicUser> {
     const user = await this.userService.create(input);
@@ -31,8 +30,7 @@ export class AuthService {
   }
 
   async login(input: LoginInput): Promise<AuthResult> {
-    const email = input.email.trim().toLowerCase();
-    const user = await UserRepository.findByEmailWithPassword(email);
+    const user = await this.userService.findByEmailWithPassword(input.email);
 
     // Resposta generica: nao revela se o e-mail existe ou se a senha esta incorreta.
     if (!user || !(await comparePassword(input.password, user.password))) {

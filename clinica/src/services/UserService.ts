@@ -61,4 +61,8 @@ export class UserService {
 
     return user;
   }
+
+  findByEmailWithPassword(email: string): Promise<User | null> {
+    return UserRepository.findByEmailWithPassword(normalizeEmail(email));
+  }
 }
