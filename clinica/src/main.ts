@@ -1,18 +1,29 @@
+import 'reflect-metadata';
 import express from 'express';
+import { AppDataSource } from './database/data-source.js';
 
-const app = express();
-const port = Number(process.env.PORT ?? 3000);
+export async function main(): Promise<void> {
+  await AppDataSource.initialize();
 
-app.use(express.json());
+  const app = express();
+  const port = Number(process.env.PORT ?? 3000);
 
-app.get('/', (_request, response) => {
-  response.json({ message: 'ClinicaMedica API' });
-});
+  app.use(express.json());
 
-app.get('/health', (_request, response) => {
-  response.json({ status: 'ok' });
-});
+  app.get('/', (_request, response) => {
+    response.json({ message: 'ClinicaMedica API' });
+  });
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+  app.get('/health', (_request, response) => {
+    response.json({ status: 'ok', database: AppDataSource.isInitialized ? 'up' : 'down' });
+  });
+
+  app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+  });
+}
+
+main().catch((error: unknown) => {
+  console.error('Failed to initialize the application:', error);
+  process.exitCode = 1;
 });
