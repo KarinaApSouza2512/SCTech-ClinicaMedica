@@ -1,0 +1,23 @@
+{
+  "name": "sctech",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js",
+    "test": "node --test src/services/test.js",
+    "coverage": "node --test --experimental-test-coverage src/services/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KarinaApSouza2512/SCTech-ClinicaMedica.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/KarinaApSouza2512/SCTech-ClinicaMedica/issues"
+  },
+  "homepage": "https://github.com/KarinaApSouza2512/SCTech-ClinicaMedica#readme"
+}
