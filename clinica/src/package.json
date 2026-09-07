@@ -2,11 +2,18 @@
   "name": "sctech",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/main.js",
   "scripts": {
-    "start": "node ./index.js",
-    "test": "node --test src/services/test.js",
-    "coverage": "node --test --experimental-test-coverage src/services/test.js"
+    "build": "tsc",
+    "start": "node ./dist/main.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
   },
   "repository": {
     "type": "git",
