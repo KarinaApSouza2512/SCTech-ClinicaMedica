@@ -1,14 +1,19 @@
 import 'reflect-metadata';
+import path from 'node:path';
 import { DataSource } from 'typeorm';
+import { env } from '../config/env';
+
+const rootDir = path.resolve(__dirname, '..');
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  host: process.env.DB_HOST ?? 'localhost',
-  port: Number(process.env.DB_PORT ?? 5434),
-  username: process.env.DB_USERNAME ?? 'admin',
-  password: process.env.DB_PASSWORD ?? 'password123',
-  database: process.env.DB_NAME ?? 'sctec',
-  entities: [],
-  migrations: [],
+  host: env.database.host,
+  port: env.database.port,
+  username: env.database.user,
+  password: env.database.password,
+  database: env.database.name,
   synchronize: false,
+  logging: env.nodeEnv === 'development',
+  entities: [path.join(rootDir, 'entities', '*.{ts,js}')],
+  migrations: [path.join(rootDir, 'database', 'migrations', '*.{ts,js}')],
 });
