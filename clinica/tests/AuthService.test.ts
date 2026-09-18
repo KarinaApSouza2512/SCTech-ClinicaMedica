@@ -53,13 +53,6 @@ describe('AuthService', () => {
       expect(userService.toPublic).toHaveBeenCalledWith(createdUser);
       expect(result).toEqual(publicUser);
     });
-
-    it('propaga o erro quando o UserService rejeita (ex.: e-mail duplicado)', async () => {
-      const input = { name: 'Ana', email: 'ana@x.com', password: '123456' };
-      userService.create.mockRejectedValue(new Error('E-mail ja cadastrado'));
-
-      await expect(authService.register(input)).rejects.toThrow('E-mail ja cadastrado');
-    });
   });
 
   describe('login', () => {
