@@ -22,7 +22,7 @@ export interface AuthResult {
 }
 
 export class AuthService {
-  constructor(private readonly userService: UserService = new UserService()) {}
+  constructor(private readonly userService: UserService) {}
 
   async register(input: RegisterInput): Promise<PublicUser> {
     const user = await this.userService.create(input);
