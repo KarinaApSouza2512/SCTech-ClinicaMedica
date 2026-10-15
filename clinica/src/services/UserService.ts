@@ -4,6 +4,8 @@ import { UserRepository } from '../repositories/UserRepository';
 import { AppError } from '../utils/AppError';
 import { hashPassword } from '../utils/hash';
 
+type UserRepo = typeof UserRepository;
+
 export interface CreateUserInput {
   name: string;
   email: string;
@@ -24,6 +26,8 @@ function normalizeEmail(email: string): string {
 }
 
 export class UserService {
+  constructor(private readonly userRepository: UserRepo) {}
+
   toPublic(user: User): PublicUser {
     return {
       id: user.id,
@@ -36,24 +40,24 @@ export class UserService {
 
   async create(input: CreateUserInput): Promise<User> {
     const email = normalizeEmail(input.email);
-    const existing = await UserRepository.findByEmail(email);
+    const existing = await this.userRepository.findByEmail(email);
 
     if (existing) {
       throw AppError.conflict('E-mail ja cadastrado');
     }
 
-    const user = UserRepository.create({
+    const user = this.userRepository.create({
       name: input.name.trim(),
       email,
       password: await hashPassword(input.password),
       role: input.role ?? Role.ATTENDANT,
     });
 
-    return UserRepository.save(user);
+    return this.userRepository.save(user);
   }
 
   async findById(id: string): Promise<User> {
-    const user = await UserRepository.findById(id);
+    const user = await this.userRepository.findById(id);
 
     if (!user) {
       throw AppError.notFound('Usuario nao encontrado');
@@ -63,6 +67,6 @@ export class UserService {
   }
 
   findByEmailWithPassword(email: string): Promise<User | null> {
-    return UserRepository.findByEmailWithPassword(normalizeEmail(email));
+    return this.userRepository.findByEmailWithPassword(normalizeEmail(email));
   }
 }
